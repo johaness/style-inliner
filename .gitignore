@@ -2,3 +2,4 @@
 *.bat
 *.svn
 *.bak
+*.egg-info
