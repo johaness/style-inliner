@@ -11,16 +11,17 @@ def inline_styles(document, css):
     document = html.fromstring(document)
     elms = {} # stores all inlined elements.
     for rule in cssutils.parseString(css):
-        for element in document.cssselect(getattr(rule, 'selectorText', [])):
-            if element not in elms:
-                elms[element] = cssutils.css.CSSStyleDeclaration()
-                inline_styles = element.get('style')
-                if inline_styles:
-                    for p in cssutils.css.CSSStyleDeclaration(cssText=inline_styles):
-                        elms[element].setProperty(p)
+        if hasattr(rule, 'selectorText'):
+            for element in document.cssselect(rule.selectorText):
+                if element not in elms:
+                    elms[element] = cssutils.css.CSSStyleDeclaration()
+                    inline_styles = element.get('style')
+                    if inline_styles:
+                        for p in cssutils.css.CSSStyleDeclaration(cssText=inline_styles):
+                            elms[element].setProperty(p)
 
-            for p in rule.style:
-                elms[element].setProperty(p.name, p.value, p.priority)
+                for p in rule.style:
+                    elms[element].setProperty(p.name, p.value, p.priority)
 
     # Set inline style attributes unless the element is not worth styling.
     for element, style in elms.iteritems():
