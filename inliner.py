@@ -7,7 +7,7 @@ from lxml import etree, html
 ignore_list = ['html', 'head', 'title', 'meta', 'link', 'script']
 
 
-def convert(document, css):
+def inline_styles(document, css):
     document = html.fromstring(document)
     elms = {} # stores all inlined elements.
     for rule in cssutils.parseString(css):
